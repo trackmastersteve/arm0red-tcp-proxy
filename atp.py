@@ -97,7 +97,38 @@ def hexdump(src, length=16):
         text = b''.join([x if 0x20 <= ord(x) < 0x7F else b'.' for x in s])
         result.append( b"%04X  %-*s  %s" % (i, length*(digits +1), hexa, text))
     
-    print(b'\n'.join(result))
+    print(bytes(str("\n".join(result))))
+
+def receive_from(connection):
+    buffer = ""
+
+    # We set a 2 secod timeout; depending on your target, this may need to be adjusted.
+    connection.settimeout(2)
+
+        try:
+            # Keep reading into the buffer until there's no more data or we time out.
+            while True:
+                data = connection.recv(4096)
+
+                if not data:
+                    break
+
+                buffer += data
+
+        except:
+        pass
+
+        return buffer
+
+# Modify any requests destined for the remote host.
+def request_handler(buffer):
+    # Perform packet modifications.
+    return buffer
+
+# Modify any requests destined for the local host.
+def response_handler(buffer):
+    # Perform packet modifications.
+    return buffer
     
 def main():
     # no fancy command-line parsing here
